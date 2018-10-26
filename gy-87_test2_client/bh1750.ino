@@ -46,10 +46,18 @@ void bh1750_loop() {
   float lux = lightMeter.readLightLevel();
   Serial.print(",'Light': ");
   Serial.print(lux);
+  client.print(",'Light': ");
+  client.print(lux);
 //  Serial.println(" lx");
 //  delay(1000);
-  send_data.concat(",'Light': ");
-  send_data.concat(lux);
+//  char* datas = ",'Light':";
+//  send_client_data(datas);
+//
+//
+//  char charVal[10];               //temporarily holds data from vals 
+//  dtostrf(lux, 4, 4, charVal); //4 is mininum width, 4 is precision; float value is copied onto buff
+//  send_client_data(charVal);
+
 
 }
 

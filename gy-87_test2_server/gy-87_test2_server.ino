@@ -6,19 +6,19 @@ const char* password = "zzzzzzzz";
 WiFiServer server(23);
 WiFiClient serverClients[MAX_SRV_CLIENTS];
 
-String send_data = "[{";
+//String send_data = "[{";
 int this_device_id = 0;
 
 void setup() {
   WiFi.mode(WIFI_AP);
   Serial.begin(9600);
-  WiFi.softAP("think_13", "zzzzzzzz");
+  WiFi.softAP("iot_smart_ocean_master", "");
   IPAddress myIP = WiFi.softAPIP();
   server.begin();
   server.setNoDelay(true);
 //  bmp180_setup();
-  mpu6050_setup();
-  bh1750_setup();
+//  mpu6050_setup();
+//  bh1750_setup();
 }
 
 void loop() {
@@ -45,13 +45,23 @@ void loop() {
     if (serverClients[i] && serverClients[i].connected()) {
       if (serverClients[i].available()) {
         //get data from the telnet client and push it to the UART
-        char a[10];
+        char* receive_client;
         int count = 0;
         while (serverClients[i].available()) {
           char receive_data = serverClients[i].read();
+//          receive_client[count++] = serverClients[i].read();
           Serial.write(receive_data);
+//          for (int i = 0; i < MAX_SRV_CLIENTS; i++) {
+//            if (serverClients[i] && serverClients[i].connected()) {
+//              serverClients[i].write(receive_data);
+//              delay(1);
+//      
+//            }
+//          }
         }
-
+        
+        count = 0;
+        
       }
     }
   }
@@ -78,43 +88,37 @@ void loop() {
 
   /*Serial communication */
 
-
-//  bmp180_loop();
   Serial.print("[{");
   Serial.print("'id':");
   Serial.print(this_device_id);
-  bh1750_loop();
-  mpu6050_loop();
-  Serial.println("}]");
   
+  char* start_char = "[{'id':";
+  send_client_data(start_char);
   
-  Serial.print("[{");
-  Serial.print("'id':");
-  send_data.concat("'id':");
-  Serial.print(this_device_id);
-  send_data.concat(this_device_id);
-  bh1750_loop();
-  mpu6050_loop();
+  char charVal[10];               //temporarily holds data from vals 
+  dtostrf(this_device_id, 4, 4, charVal);
+  
+  send_client_data(charVal);
+  
+//  bh1750_loop();
+//  mpu6050_loop();
 //  Serial.println("}]");
   
 
 
 
-  char* b = "[{'id':";
-//  send_data.toCharArray(b, 100);
+  delay(1000);
+}
 
-
-    //    Serial.println(sbuf[0]);
-
-    //push UART data to all connected telnet clients
-    for (i = 0; i < MAX_SRV_CLIENTS; i++) {
+void send_client_data(char* send_data){
+//push UART data to all connected telnet clients
+    for (int i = 0; i < MAX_SRV_CLIENTS; i++) {
       if (serverClients[i] && serverClients[i].connected()) {
-        serverClients[i].write(b);
+        serverClients[i].write(send_data);
         delay(1);
 
       }
     }
-
-
-  delay(1000);
 }
+
+

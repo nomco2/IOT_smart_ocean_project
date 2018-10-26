@@ -769,12 +769,20 @@ void mpu6050_loop()
   // At 0 degrees: -512 - (340 * 35) = -12412
 
   Serial.print(F(", 'temperature':"));
+  client.print(F(", 'temperature':"));
+
   dT = ( (double) accel_t_gyro.value.temperature + 12412.0) / 340.0;
   Serial.print(dT, 3);
+  client.print(dT, 3);
 //  Serial.print(F(" degrees Celsius"));
 //  Serial.println(F("}"));
+//  char* datas = ",'temperature':";
+//  send_client_data(datas);
+//  char charVal[10];               //temporarily holds data from vals 
+//  dtostrf(dT, 4, 4, charVal); //4 is mininum width, 4 is precision; float value is copied onto buff
+//  send_client_data(charVal);
 
-
+  
   // Print the raw gyro values.
 
   Serial.print(F(", 'x': "));
@@ -783,8 +791,33 @@ void mpu6050_loop()
   Serial.print(accel_t_gyro.value.y_gyro, DEC);
   Serial.print(F(", 'z': "));
   Serial.print(accel_t_gyro.value.z_gyro, DEC);
-//  Serial.println(F("}]"));
-//  Serial.println(F(""));
+  Serial.println(F("}]"));
+
+  client.print(F(", 'x': "));
+  client.print(accel_t_gyro.value.x_gyro, DEC);
+  client.print(F(", 'y': "));
+  client.print(accel_t_gyro.value.y_gyro, DEC);
+  client.print(F(", 'z': "));
+  client.print(accel_t_gyro.value.z_gyro, DEC);
+  client.println(F("}]"));
+
+//  datas = ",'x':";
+//  send_client_data(datas);
+//  dtostrf(accel_t_gyro.value.x_gyro, 4, 4, charVal); //4 is mininum width, 4 is precision; float value is copied onto buff
+//  send_client_data(charVal);
+//
+//  datas = ",'y':";
+//  send_client_data(datas);
+//  dtostrf(accel_t_gyro.value.y_gyro, 4, 4, charVal); //4 is mininum width, 4 is precision; float value is copied onto buff
+//  send_client_data(charVal);
+//
+//  datas = ",'z':";
+//  send_client_data(datas);
+//  dtostrf(accel_t_gyro.value.z_gyro, 4, 4, charVal); //4 is mininum width, 4 is precision; float value is copied onto buff
+//  send_client_data(charVal);
+//
+//  datas = "}]\n";
+//  send_client_data(datas);
 
 //  delay(1000);
 }
