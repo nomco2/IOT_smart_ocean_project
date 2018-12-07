@@ -17,8 +17,8 @@ void setup() {
   server.begin();
   server.setNoDelay(true);
 //  bmp180_setup();
-//  mpu6050_setup();
-//  bh1750_setup();
+  mpu6050_setup();
+  bh1750_setup();
 }
 
 void loop() {
@@ -100,9 +100,9 @@ void loop() {
   
   send_client_data(charVal);
   
-//  bh1750_loop();
-//  mpu6050_loop();
-//  Serial.println("}]");
+  bh1750_loop();
+  mpu6050_loop();
+  Serial.println("}]");
   
 
 
