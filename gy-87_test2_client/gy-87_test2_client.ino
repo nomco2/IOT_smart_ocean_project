@@ -72,10 +72,10 @@ void loop() {
   Serial.print("[{");
   Serial.print("'id':");
   Serial.print(this_device_id);
-  
-  client.print("[{");
-  client.print("'id':");
-  client.print(this_device_id);
+  client.println("test1");
+//  client.print("[{");
+//  client.print("'id':");
+//  client.print(this_device_id);
   
 //  char* start_char = "[{'id':";
 //  send_client_data(start_char);
@@ -85,14 +85,14 @@ void loop() {
 //  
 //  send_client_data(charVal);
   
-  bh1750_loop();
-  mpu6050_loop();
+//  bh1750_loop();
+//  mpu6050_loop();
 //  Serial.println("}]");
   
 
 
 
-  delay(1000);
+  delay(2000);
 }
 
 

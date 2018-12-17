@@ -9,6 +9,9 @@ WiFiClient serverClients[MAX_SRV_CLIENTS];
 //String send_data = "[{";
 int this_device_id = 0;
 
+String temp_receive_data ="";
+String compelete_receive_data ="";
+
 void setup() {
   WiFi.mode(WIFI_AP);
   Serial.begin(9600);
@@ -32,7 +35,7 @@ void loop() {
       if (!serverClients[i] || !serverClients[i].connected()) {
         if (serverClients[i]) serverClients[i].stop();
         serverClients[i] = server.available();
-                Serial.print("New client: "); Serial.print(i);
+        Serial.print("New client: "); Serial.print(i);
         continue;
       }
     }
@@ -48,23 +51,35 @@ void loop() {
         char* receive_client;
         int count = 0;
         while (serverClients[i].available()) {
-          char receive_data = serverClients[i].read();
+//          char receive_data = serverClients[i].read();
 //          receive_client[count++] = serverClients[i].read();
-          Serial.write(receive_data);
+          Serial.write(serverClients[i].read());
 //          for (int i = 0; i < MAX_SRV_CLIENTS; i++) {
 //            if (serverClients[i] && serverClients[i].connected()) {
-//              serverClients[i].write(receive_data);
+//              serverClients[i].write(serverClients[i].read());
 //              delay(1);
 //      
 //            }
 //          }
-        }
+          
+//          if(serverClients[i].read() == '['){
+//            temp_receive_data = "";
+//          }else if(serverClients[i].read() == ']'){
+//            compelete_receive_data = temp_receive_data;
+//            Serial.print("all receive : ");
+//            Serial.println(compelete_receive_data);
+//          }else{
+//            temp_receive_data += serverClients[i].read();
+//          }
+        }//client while 끝
         
         count = 0;
         
       }
     }
   }
+
+  /*
   //check UART for data
   if (Serial.available()) {
     size_t len = Serial.available();
@@ -81,6 +96,7 @@ void loop() {
       }
     }
   }
+  */
 
 
 
@@ -95,8 +111,8 @@ void loop() {
   char* start_char = "[{'id':";
   send_client_data(start_char);
   
-  char charVal[10];               //temporarily holds data from vals 
-  dtostrf(this_device_id, 4, 4, charVal);
+  char* charVal = "0";               //temporarily holds data from vals 
+//  dtostrf(this_device_id, 4, 4, charVal);
   
   send_client_data(charVal);
   
